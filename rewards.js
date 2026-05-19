@@ -9,7 +9,7 @@ function showRewards() {
       .play()
       .catch(() => {});
   }
-  showScreen("rewards-screen");
+  showScreen("rewards-screen", true);
   showCompanion("Open your gifts! 🎁");
 }
 
@@ -25,7 +25,7 @@ function hideVideos() {
   document.getElementById("gift-grid").style.display = "flex";
   document.getElementById("video-gallery").style.display = "none";
   stopVoice();
-  setTimeout(() => playVoice("reward_audio"), 300);
+  // setTimeout(() => playVoice("reward_audio"), 300);
 }
 function showCards() {
   document.getElementById("gift-grid").style.display = "none";
@@ -38,7 +38,7 @@ function hideCards() {
   document.getElementById("gift-grid").style.display = "flex";
   document.getElementById("cards-gallery").style.display = "none";
   stopVoice();
-  setTimeout(() => playVoice("reward_audio"), 300);
+  // setTimeout(() => playVoice("reward_audio"), 300);
 }
 
 // ================================================================

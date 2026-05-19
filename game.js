@@ -245,7 +245,7 @@ function completeChallenge(n, pts) {
     sfx.play().catch(() => {});
   }
   stopVoice();
-  setTimeout(() => playVoice(CHALLENGE_DONE_AUDIOS[n]), 120);
+  setTimeout(() => { playVoice(CHALLENGE_DONE_AUDIOS[n]); }, 450);
 
   const starsHTML = buildStarsHTML(n);
   const allDone = gameState.completed.every((v) => v);

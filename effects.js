@@ -167,6 +167,7 @@ function makeDraggable(el) {
   el.addEventListener("mousedown", startDrag);
   el.addEventListener("touchstart", startDrag, { passive: false });
   function startDrag(e) {
+    e.preventDefault();
     dragItem = el;
     dragItem.style.cursor = "grabbing";
     const rect = dragItem.getBoundingClientRect();
@@ -192,7 +193,10 @@ function makeDraggable(el) {
     if (dragItem) {
       dragItem.style.cursor = "grab";
     }
-    dragItem = null;
+    setTimeout(() => {
+      dragItem = null;
+    }, 50);
+    // dragItem = null;
     document.removeEventListener("mousemove", drag);
     document.removeEventListener("mouseup", stopDrag);
     document.removeEventListener("touchmove", drag);

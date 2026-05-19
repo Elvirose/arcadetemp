@@ -120,3 +120,82 @@ function spawnParticles() {
     setTimeout(() => p.remove(), 1200);
   }
 }
+// ================================================================
+// TAP EMOJI POP
+// ================================================================
+const tapEmojis = [
+  "🎂",
+  "🎩",
+  "🐥",
+  "🐶",
+  "👦",
+  "👨‍👩‍👦",
+  "💖",
+  "🏍️",
+  "🎈",
+  "✨",
+  "💫",
+  "🎁",
+];
+document.addEventListener("click", (e) => {
+  if (
+    e.target.closest("button") ||
+    e.target.closest(".btn-pixel") ||
+    e.target.closest(".challenge-card") ||
+    e.target.closest(".gift-box") ||
+    e.target.closest(".card-item") ||
+    e.target.closest(".ss-nav")
+  )
+    return;
+  const emoji = document.createElement("div");
+  emoji.className = "tap-emoji";
+  emoji.textContent = tapEmojis[Math.floor(Math.random() * tapEmojis.length)];
+  emoji.style.left = `${e.clientX - 10}px`;
+  emoji.style.top = `${e.clientY - 10}px`;
+  document.body.appendChild(emoji);
+  setTimeout(() => {
+    emoji.remove();
+  }, 1000);
+});
+// ================================================================
+// DRAGGABLE CARD POPUP
+// ================================================================
+let dragItem = null;
+let offsetX = 0;
+let offsetY = 0;
+function makeDraggable(el) {
+  el.addEventListener("mousedown", startDrag);
+  el.addEventListener("touchstart", startDrag, { passive: false });
+  function startDrag(e) {
+    dragItem = el;
+    dragItem.style.cursor = "grabbing";
+    const rect = dragItem.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    offsetX = clientX - rect.left;
+    offsetY = clientY - rect.top;
+    document.addEventListener("mousemove", drag);
+    document.addEventListener("mouseup", stopDrag);
+    document.addEventListener("touchmove", drag, { passive: false });
+    document.addEventListener("touchend", stopDrag);
+  }
+  function drag(e) {
+    if (!dragItem) return;
+    e.preventDefault();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    dragItem.style.position = "fixed";
+    dragItem.style.left = `${clientX - offsetX}px`;
+    dragItem.style.top = `${clientY - offsetY}px`;
+  }
+  function stopDrag() {
+    if (dragItem) {
+      dragItem.style.cursor = "grab";
+    }
+    dragItem = null;
+    document.removeEventListener("mousemove", drag);
+    document.removeEventListener("mouseup", stopDrag);
+    document.removeEventListener("touchmove", drag);
+    document.removeEventListener("touchend", stopDrag);
+  }
+}

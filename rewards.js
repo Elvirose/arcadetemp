@@ -83,6 +83,7 @@ function openCardSlideshow(cardNum) {
     `💌 ${CARD_NAMES_MAP[cardNum]}`;
   loadSlideshowPage();
   document.getElementById("card-slideshow-overlay").classList.add("active");
+  makeDraggable(document.getElementById("card-slideshow-inner"));
 }
 
 function loadSlideshowPage() {

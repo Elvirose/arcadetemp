@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="main/favicon.png" />
+    <meta property="og:title" content="🎮 Anson Birthday Arcade" />
+    <meta property="og:description" content="A special birthday arcade adventure filled with games, memories, surprises, and love 💖"/>
+    <meta property="og:image" content="main/preview.jpg" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday Anson 🎉</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="galaxy-bg"></div>
+    <div class="stars-layer"></div>
+
+    <div id="audio-bar">
+      <div class="audio-ctrl">
+        <button class="audio-btn" id="music-btn" onclick="toggleMusic()">
+          🎵 MUSIC
+        </button>
+        <input
+          type="range"
+          class="vol-slider"
+          id="music-vol"
+          min="0"
+          max="1"
+          step="0.05"
+          value="0.7"
+          oninput="setMusicVol(this.value)"
+        />
+      </div>
+      <div class="audio-ctrl">
+        <button class="audio-btn" id="voice-btn" onclick="toggleVoice()">
+          🔊 VOICE
+        </button>
+        <input
+          type="range"
+          class="vol-slider voice-sl"
+          id="voice-vol"
+          min="0"
+          max="1"
+          step="0.05"
+          value="1"
+          oninput="setVoiceVol(this.value)"
+        />
+      </div>
+    </div>
+    <div id="points-bar">⭐ <span id="points-display">0</span> PTS</div>
+
+    <!-- Pixel girl companion image -->
+    <img
+      id="pixel-companion"
+      src="main/img1.jpg"
+      alt="Companion"
+      onerror="
+        this.src =
+          'data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%23ff2d78\'/><text x=\'50\' y=\'60\' text-anchor=\'middle\' font-size=\'40\'>👩</text></svg>'
+      "
+    />
+    <div id="companion-bubble"></div>
+
+    <audio id="bgmusic" src="audios/bgmusic.mp3" loop></audio>
+    <audio id="championMusic" src="audios/champions.mp3"></audio>
+    <audio id="congrats_sfx" src="audios/congrats.mp3" preload="auto"></audio>
+    <audio id="yey_sfx" src="audios/yey.mp3" preload="auto"></audio>
+
+    <!-- PASSWORD SCREEN -->
+    <div id="password-screen" class="screen active">
+      <div id="pw-lock-icon">🔐</div>
+      <div id="pw-title" class="glow-text">HAPPY BIRTHDAY<br />CHEKA ❤️</div>
+      <div id="pw-subtitle">ENTER THE SECRET PASSWORD</div>
+      <div id="pw-form">
+        <input
+          id="pw-input"
+          type="password"
+          placeholder="••••••••••••••••"
+          autocomplete="off"
+          maxlength="30"
+        />
+        <div id="pw-error">❌ WRONG PASSWORD — TRY AGAIN!</div>
+        <button class="btn-pixel" onclick="checkPassword()">🔓 UNLOCK</button>
+      </div>
+    </div>
+
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen">
+      <div id="start-title" class="glow-text">
+        🎉 HAPPY BIRTHDAY<br />CHEKA ❤️
+      </div>
+      <div id="start-subtitle">LET'S PLAY A GAME</div>
+      <div id="start-buttons">
+        <button class="btn-pixel" onclick="startGame()">▶ START GAME</button>
+      </div>
+    </div>
+
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen" class="screen">
+      <div id="loading-title" class="glow-text">LOADING BIRTHDAY ADVENTURE</div>
+      <div id="loading-bar-wrap"><div id="loading-bar"></div></div>
+      <div id="loading-text">Initializing Galaxy...</div>
+    </div>
+
+    <!-- HUB -->
+    <div id="hub-screen" class="screen">
+      <div id="hub-title" class="glow-text">🕹️ BIRTHDAY ARCADE HUB</div>
+      <div id="challenge-grid">
+        <div
+          class="challenge-card unlocked"
+          id="card-1"
+          onclick="openChallenge(1)"
+        >
+          <div class="card-icon">❌⭕</div>
+          <div class="card-title">TIC TAC TOE VS BOT</div>
+          <div class="card-pts">440 PTS</div>
+          <div class="lock-icon" id="lock-1"></div>
+          <div class="card-badge">✓ DONE</div>
+        </div>
+        <div
+          class="challenge-card locked"
+          id="card-2"
+          onclick="openChallenge(2)"
+        >
+          <div class="card-icon">🔍</div>
+          <div class="card-title">WORD SEARCH</div>
+          <div class="card-pts">440 PTS</div>
+          <div class="lock-icon" id="lock-2">🔒</div>
+          <div class="card-badge">✓ DONE</div>
+        </div>
+        <div
+          class="challenge-card locked"
+          id="card-3"
+          onclick="openChallenge(3)"
+        >
+          <div class="card-icon">🧩</div>
+          <div class="card-title">BLOCK PUZZLE</div>
+          <div class="card-pts">440 PTS</div>
+          <div class="lock-icon" id="lock-3">🔒</div>
+          <div class="card-badge">✓ DONE</div>
+        </div>
+        <div
+          class="challenge-card locked"
+          id="card-4"
+          onclick="openChallenge(4)"
+        >
+          <div class="card-icon">❓</div>
+          <div class="card-title">QUIZ ABOUT YOU</div>
+          <div class="card-pts">440 PTS</div>
+          <div class="lock-icon" id="lock-4">🔒</div>
+          <div class="card-badge">✓ DONE</div>
+        </div>
+        <div
+          class="challenge-card locked"
+          id="card-5"
+          onclick="openChallenge(5)"
+        >
+          <div class="card-icon">🖼️</div>
+          <div class="card-title">PHOTO PUZZLE</div>
+          <div class="card-pts">440 PTS</div>
+          <div class="lock-icon" id="lock-5">🔒</div>
+          <div class="card-badge">✓ DONE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSTRUCTION -->
+    <div id="instruction-screen" class="screen">
+      <div
+        class="pixel-panel"
+        style="max-width: 600px; width: 90%; position: relative; z-index: 10"
+      >
+        <div
+          id="instr-title"
+          class="glow-text"
+          style="font-size: 0.9rem; margin-bottom: 20px; text-align: center"
+        ></div>
+        <div id="instr-body"></div>
+        <div
+          style="
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+            flex-wrap: wrap;
+          "
+        >
+          <button
+            id="instr-start-btn"
+            class="btn-pixel green"
+            onclick="startChallenge()"
+            disabled
+          >
+            ▶ START CHALLENGE
+          </button>
+          <button
+            class="btn-pixel"
+            style="
+              background: rgba(100, 100, 100, 0.3);
+              box-shadow: none;
+              border: 1.5px solid #555;
+            "
+            onclick="showHub()"
+          >
+            ← BACK
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TTT -->
+    <div id="ttt-screen" class="screen">
+      <div class="game-wrapper">
+        <div class="game-title glow-text">❌ TIC TAC TOE ⭕</div>
+        <div id="ttt-rounds" class="glow-blue">ROUND: 0/3</div>
+        <div id="ttt-status">YOUR TURN</div>
+        <div id="ttt-board">
+          <div class="ttt-cell" onclick="tttClick(0)"></div>
+          <div class="ttt-cell" onclick="tttClick(1)"></div>
+          <div class="ttt-cell" onclick="tttClick(2)"></div>
+          <div class="ttt-cell" onclick="tttClick(3)"></div>
+          <div class="ttt-cell" onclick="tttClick(4)"></div>
+          <div class="ttt-cell" onclick="tttClick(5)"></div>
+          <div class="ttt-cell" onclick="tttClick(6)"></div>
+          <div class="ttt-cell" onclick="tttClick(7)"></div>
+          <div class="ttt-cell" onclick="tttClick(8)"></div>
+        </div>
+        <button
+          class="btn-pixel"
+          style="font-size: 0.4rem; padding: 8px 16px"
+          onclick="restartTTT()"
+        >
+          🔄 RESTART
+        </button>
+        <button
+          class="btn-pixel"
+          style="
+            font-size: 0.4rem;
+            padding: 8px 16px;
+            background: rgba(100, 100, 100, 0.3);
+            box-shadow: none;
+            border: 1.5px solid #555;
+          "
+          onclick="showHub()"
+        >
+          ← HUB
+        </button>
+      </div>
+    </div>
+
+    <!-- WORD SEARCH -->
+    <div id="ws-screen" class="screen">
+      <div class="game-wrapper">
+        <div class="game-title glow-text">🔍 WORD SEARCH</div>
+        <div id="ws-timer" class="glow-yellow">⏱ 00:00</div>
+        <div id="ws-hint-bar">
+          <button id="ws-hint-btn" onclick="wsUseHint()">💡 HINT</button>
+          <span id="ws-hint-count">5 hints left</span>
+        </div>
+        <div id="ws-grid"></div>
+        <div id="ws-words"></div>
+        <button
+          class="btn-pixel"
+          style="
+            font-size: 0.4rem;
+            padding: 8px 16px;
+            background: rgba(100, 100, 100, 0.3);
+            box-shadow: none;
+            border: 1.5px solid #555;
+          "
+          onclick="showHub()"
+        >
+          ← HUB
+        </button>
+      </div>
+    </div>
+
+    <!-- BLOCK PUZZLE -->
+    <div id="bp-screen" class="screen">
+      <div class="game-wrapper">
+        <div class="game-title glow-text">🧩 BLOCK PUZZLE</div>
+        <div id="bp-score" class="glow-yellow">SCORE: 0 / 440</div>
+        <div id="bp-target" class="glow-blue">
+          Click a piece, then click the board to place
+        </div>
+        <!-- Power-up buttons -->
+        <div id="bp-powerups">
+          <button
+            class="bp-pwr rotate-btn"
+            id="bp-rotate-btn"
+            onclick="bpRotatePiece()"
+            title="Rotate selected piece (1 use)"
+          >
+            🔄 ROTATE <span class="bp-pwr-badge" id="rotate-badge">1</span>
+          </button>
+          <button
+            class="bp-pwr swap-btn"
+            id="bp-swap-btn"
+            onclick="bpSwapPieces()"
+            title="Swap all pieces for new ones (1 use)"
+          >
+            🔃 NEW SET <span class="bp-pwr-badge" id="swap-badge">1</span>
+          </button>
+          <button
+            class="bp-pwr undo-btn"
+            id="bp-undo-btn"
+            onclick="bpUndo()"
+            title="Undo last placed piece (1 use)"
+          >
+            ↩ UNDO <span class="bp-pwr-badge" id="undo-badge">1</span>
+          </button>
+        </div>
+        <div id="bp-container">
+          <div id="bp-board-wrap">
+            <div class="pp-board-label">BOARD</div>
+            <div id="bp-board"></div>
+          </div>
+          <div>
+            <div class="pp-board-label">PIECES</div>
+            <div id="bp-pieces"></div>
+          </div>
+        </div>
+        <button
+          class="btn-pixel"
+          style="font-size: 0.4rem; padding: 8px 16px"
+          onclick="resetBP()"
+        >
+          🔄 RESET
+        </button>
+        <button
+          class="btn-pixel"
+          style="
+            font-size: 0.4rem;
+            padding: 8px 16px;
+            background: rgba(100, 100, 100, 0.3);
+            box-shadow: none;
+            border: 1.5px solid #555;
+          "
+          onclick="showHub()"
+        >
+          ← HUB
+        </button>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="quiz-screen" class="screen">
+      <div class="game-wrapper">
+        <div class="game-title glow-text">❓ QUIZ TIME</div>
+        <div id="quiz-info" class="glow-blue">QUESTION 1/4</div>
+        <div id="quiz-image-wrap">
+          <div id="quiz-img-placeholder">❓</div>
+          <img id="quiz-img-actual" src="" alt="" />
+        </div>
+        <div id="quiz-question"></div>
+        <div id="quiz-options"></div>
+        <div id="quiz-warning">
+          ⚠️ WRONG! ONE WARNING USED. NEXT WRONG = RESTART!
+        </div>
+      </div>
+    </div>
+
+    <!-- PHOTO PUZZLE -->
+    <div id="pp-screen" class="screen">
+      <div class="game-wrapper" style="max-width: 900px">
+        <div class="game-title glow-text">🖼️ PHOTO PUZZLE</div>
+        <div id="pp-container">
+          <div>
+            <div class="pp-board-label">TARGET</div>
+            <div id="pp-preview"></div>
+          </div>
+          <div>
+            <div class="pp-board-label">YOUR BOARD</div>
+            <div id="pp-main"></div>
+          </div>
+          <div>
+            <div class="pp-board-label">PIECES</div>
+            <div id="pp-pieces-board"></div>
+          </div>
+        </div>
+        <button
+          class="btn-pixel"
+          style="font-size: 0.4rem; padding: 8px 16px"
+          onclick="resetPP()"
+        >
+          🔄 RESET
+        </button>
+        <button
+          class="btn-pixel"
+          style="
+            font-size: 0.4rem;
+            padding: 8px 16px;
+            background: rgba(100, 100, 100, 0.3);
+            box-shadow: none;
+            border: 1.5px solid #555;
+          "
+          onclick="showHub()"
+        >
+          ← HUB
+        </button>
+      </div>
+    </div>
+
+    <!-- CELEBRATION -->
+    <div id="celebration-screen" class="screen">
+      <div id="celeb-title" class="glow-text">🎉 CONGRATULATIONS 🎉</div>
+      <div id="celeb-pts" class="glow-yellow"></div>
+      <div id="celeb-msg">
+        ❤️ HAPPY 22ND BIRTHDAY ANSON ❤️<br /><br />May God bless you and let
+        you<br />live your life to the fullest.
+      </div>
+      <button
+        class="btn-pixel green"
+        style="margin-top: 20px"
+        onclick="showRewards()"
+      >
+        🎁 CLAIM YOUR REWARDS
+      </button>
+    </div>
+
+    <!-- REWARDS SCREEN -->
+    <div id="rewards-screen" class="screen">
+      <div id="rewards-title" class="glow-text">🎁 YOUR BIRTHDAY GIFTS</div>
+
+      <div id="gift-grid">
+        <div class="gift-box" onclick="showVideos()">
+          <div class="gift-icon">🎥</div>
+          <div class="gift-label">BIRTHDAY EDIT VIDEOS</div>
+        </div>
+        <div class="gift-box" onclick="showCards()">
+          <div class="gift-icon">💌</div>
+          <div class="gift-label">BIRTHDAY CARDS</div>
+        </div>
+      </div>
+
+      <!-- VIDEO GALLERY -->
+      <div id="video-gallery">
+        <div
+          style="font-size: 0.6rem; color: var(--neon-blue); text-align: center"
+        >
+          🎥 BIRTHDAY EDIT VIDEOS
+        </div>
+        <div class="video-controls-bar">
+          <button
+            class="btn-pixel green"
+            style="font-size: 0.4rem; padding: 8px 14px"
+            onclick="playAllVideos()"
+          >
+            ▶ PLAY ALL
+          </button>
+          <button
+            class="btn-pixel"
+            style="
+              font-size: 0.4rem;
+              padding: 8px 14px;
+              background: rgba(120, 0, 0, 0.5);
+              box-shadow: 0 0 10px #ff3232;
+            "
+            onclick="stopAllVideos()"
+          >
+            ⏹ STOP ALL
+          </button>
+        </div>
+        <div class="videos-row">
+          <div class="video-card">
+            <div class="video-title">✨ Edit 1</div>
+            <video id="vid1" controls src="edits/edit1.mp4">
+              Your browser does not support video.
+            </video>
+          </div>
+          <div class="video-card">
+            <div class="video-title">✨ Edit 2</div>
+            <video id="vid2" controls src="edits/edit2.mp4">
+              Your browser does not support video.
+            </video>
+          </div>
+          <div class="video-card">
+            <div class="video-title">✨ Edit 3</div>
+            <video id="vid3" controls src="edits/edit3.mp4">
+              Your browser does not support video.
+            </video>
+          </div>
+        </div>
+        <button
+          class="btn-pixel"
+          style="font-size: 0.5rem; padding: 10px 20px"
+          onclick="hideVideos()"
+        >
+          ← BACK
+        </button>
+      </div>
+
+      <!-- CARDS GALLERY -->
+      <div id="cards-gallery">
+        <div
+          style="font-size: 0.6rem; color: var(--neon-pink); margin-bottom: 8px"
+        >
+          💌 BIRTHDAY CARDS
+        </div>
+        <div id="cards-grid">
+          <div class="card-item" onclick="openCardSlideshow(1)">
+            <div class="card-emoji">👦</div>
+            <div class="card-name">ANSON CHEKKA</div>
+          </div>
+          <div class="card-item" onclick="openCardSlideshow(2)">
+            <div class="card-emoji">🐶</div>
+            <div class="card-name">CHOTTU</div>
+          </div>
+          <div class="card-item" onclick="openCardSlideshow(3)">
+            <div class="card-emoji">🐶👦</div>
+            <div class="card-name">CHOTTU &amp; CHEKKA</div>
+          </div>
+          <div class="card-item" onclick="openCardSlideshow(4)">
+            <div class="card-emoji">👨‍👩‍👦</div>
+            <div class="card-name">FAMILY</div>
+          </div>
+          <div class="card-item" onclick="openCardSlideshow(5)">
+            <div class="card-emoji">💑</div>
+            <div class="card-name">CHEKKA &amp; MOMU</div>
+          </div>
+          <div class="card-item" onclick="openCardSlideshow(6)">
+            <div class="card-emoji">🏍️</div>
+            <div class="card-name">BIKE RIDE</div>
+          </div>
+        </div>
+        <button
+          class="btn-pixel"
+          style="font-size: 0.5rem; padding: 10px 20px; margin-top: 12px"
+          onclick="hideCards()"
+        >
+          ← BACK
+        </button>
+      </div>
+
+      <button
+        class="btn-pixel green"
+        style="margin-top: 16px"
+        onclick="showFinale()"
+      >
+        💫 FINAL SURPRISE
+      </button>
+    </div>
+
+    <!-- FINAL SURPRISE -->
+    <div id="finale-screen" class="screen">
+      <div id="finale-msg" class="glow-text">🎂 MAKE A WISH, ANSON! 🎂</div>
+      <div id="finale-submsg">
+        Close your eyes and wish for something special...
+      </div>
+      <div id="finale-cake-container">
+        <div class="finale-scene">
+          <!-- Pixel girl image -->
+          <div class="pixel-girl-wrap">
+            <div class="pixel-girl-head">
+              <img src="main/elvi.jpg" alt="Birthday girl" />
+            </div>
+            <div class="pixel-girl-body"></div>
+            <div class="pixel-girl-arm left"></div>
+            <div class="pixel-girl-arm right"></div>
+          </div>
+          <!-- Cake below the girl -->
+          <div class="g-cake">
+            <div class="g-candles-row">
+              <div class="candle-wrap">
+                <div class="flame" id="f1"></div>
+                <div class="flame-smoke" id="s1"></div>
+                <div class="candle-body"></div>
+                <div class="candle-drip"></div>
+              </div>
+              <div class="candle-wrap">
+                <div class="flame" id="f2"></div>
+                <div class="flame-smoke" id="s2"></div>
+                <div class="candle-body"></div>
+                <div class="candle-drip"></div>
+              </div>
+              <div class="candle-wrap">
+                <div class="flame" id="f3"></div>
+                <div class="flame-smoke" id="s3"></div>
+                <div class="candle-body"></div>
+                <div class="candle-drip"></div>
+              </div>
+              <div class="candle-wrap">
+                <div class="flame" id="f4"></div>
+                <div class="flame-smoke" id="s4"></div>
+                <div class="candle-body"></div>
+                <div class="candle-drip"></div>
+              </div>
+              <div class="candle-wrap">
+                <div class="flame" id="f5"></div>
+                <div class="flame-smoke" id="s5"></div>
+                <div class="candle-body"></div>
+                <div class="candle-drip"></div>
+              </div>
+            </div>
+            <div class="g-cake-top">🎀</div>
+            <div class="g-cake-mid"><span>HAPPY BIRTHDAY ANSON ❤️</span></div>
+            <div class="g-cake-bot"></div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="btn-pixel yellow"
+        id="finale-wish-btn"
+        onclick="finaleWish()"
+      >
+        ✨ I'VE MADE MY WISH!
+      </button>
+      <button
+        class="btn-pixel"
+        id="finale-blow-btn"
+        onclick="finaleBlowCandles()"
+        style="
+          background: linear-gradient(135deg, #00e5ff, #0080ff);
+          box-shadow: 0 0 20px #00e5ff;
+        "
+      >
+        💨 BLOW THE CANDLES!
+      </button>
+      <div
+        id="finale-action-msg"
+        style="
+          font-size: 0.55rem;
+          color: var(--neon-yellow);
+          display: none;
+          margin-top: 6px;
+          position: relative;
+          z-index: 10;
+        "
+      ></div>
+    </div>
+
+    <!-- ENDING SCREEN -->
+    <div id="ending-screen" class="screen">
+      <div id="ending-title" class="glow-text">❤️ HAPPY BIRTHDAY ANSON ❤️</div>
+      <div id="ending-subtitle">
+        No matter how many games we play,<br />you'll always be my favorite
+        player 🎮❤️
+      </div>
+      <button
+        class="btn-pixel yellow"
+        style="margin-top: 20px"
+        onclick="playAgain()"
+      >
+        ▶ PLAY AGAIN
+      </button>
+    </div>
+
+    <!-- GENERAL OVERLAY -->
+    <div id="overlay">
+      <div id="overlay-content">
+        <span id="overlay-close" onclick="closeOverlay()">✕</span>
+        <div id="overlay-body"></div>
+      </div>
+    </div>
+
+    <!-- CARD SLIDESHOW OVERLAY -->
+    <div id="card-slideshow-overlay">
+      <div id="card-slideshow-inner">
+        <div id="slideshow-header">
+          <span id="slideshow-title">Birthday Card</span>
+          <button id="slideshow-close" onclick="closeCardSlideshow()">
+            ✕ CLOSE
+          </button>
+        </div>
+        <div id="slideshow-img-wrap">
+          <img id="slideshow-img" src="" alt="Card page" />
+        </div>
+        <div id="slideshow-controls">
+          <button class="ss-nav" id="ss-prev" onclick="slideshowPrev()">
+            ◀ PREV
+          </button>
+          <span id="slideshow-counter">1 / 1</span>
+          <button class="ss-dl-btn" onclick="slideshowDownload()">
+            ⬇ DOWNLOAD PDF
+          </button>
+          <button class="ss-nav" id="ss-next" onclick="slideshowNext()">
+            NEXT ▶
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERTIFICATE OVERLAY -->
+    <div id="cert-overlay">
+      <div id="cert-overlay-inner">
+        <div id="cert-overlay-header">
+          <span id="cert-overlay-title">
+            🏆 BIRTHDAY COMPLETION CERTIFICATE
+          </span>
+
+          <div class="cert-header-btns">
+            <button
+              class="cert-top-btn download-btn"
+              onclick="downloadCertificate()"
+            >
+              ⬇ DOWNLOAD
+            </button>
+
+            <button id="cert-overlay-close" onclick="closeCertOverlay()">
+              ✕ CLOSE
+            </button>
+          </div>
+        </div>
+
+        <img id="cert-overlay-img" src="" alt="Certificate" />
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="audio.js"></script>
+    <script src="effects.js"></script>
+    <script src="puzzles.js"></script>
+    <script src="rewards.js"></script>
+    <script src="game.js"></script>
+  </body>
+</html>

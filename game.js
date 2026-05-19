@@ -14,7 +14,9 @@ let rewardsVoicePlayed = false;
 // ================================================================
 window.addEventListener("DOMContentLoaded", () => {
   initTTS();
-  setTimeout(() => playVoice("pw_audio"), 800);
+  document.addEventListener("click", () => {
+    playVoice("pw_audio");
+  }, { once: true });
   document.getElementById("pw-input").addEventListener("keydown", (e) => {
     if (e.key === "Enter") checkPassword();
   });
@@ -239,14 +241,17 @@ function completeChallenge(n, pts) {
   spawnParticles();
   saveProgress();
   const sfx = document.getElementById("congrats_sfx");
+  stopVoice();
   if (sfx) {
     sfx.currentTime = 0;
     sfx.volume = ttsVolume;
     sfx.play().catch(() => {});
+    setTimeout(() => {
+      playVoice(CHALLENGE_DONE_AUDIOS[n]);
+    }, 1200);
+  } else {
+    playVoice(CHALLENGE_DONE_AUDIOS[n]);
   }
-  stopVoice();
-  setTimeout(() => { playVoice(CHALLENGE_DONE_AUDIOS[n]); }, 450);
-
   const starsHTML = buildStarsHTML(n);
   const allDone = gameState.completed.every((v) => v);
   if (allDone) {

@@ -9,7 +9,7 @@ function showRewards() {
       .play()
       .catch(() => {});
   }
-  showScreen("rewards-screen", true);
+  showScreen("rewards-screen");
   showCompanion("Open your gifts! 🎁");
 }
 

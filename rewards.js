@@ -316,6 +316,7 @@ function spawnFloatPhotos() {
   for (let i = 0; i < total; i++) {
     const div = document.createElement("div");
     div.className = "float-photo";
+    makeDraggable(div);
     const mobile = window.innerWidth <= 600;
     const sz = mobile ? 50 + Math.random() * 18 : 120 + Math.random() * 80;
     const left = mobile ? 12 + Math.random() * 60 : 3 + Math.random() * 90;

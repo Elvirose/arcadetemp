@@ -312,7 +312,7 @@ function spawnFloatPhotos() {
     { length: 22 },
     (_, i) => `finalimg/img${i + 3}.jpg`,
   );
-  const total = window.innerWidth <= 600 ? 10 : 22;
+  const total = window.innerWidth <= 600 ? 22 : 22;
   for (let i = 0; i < total; i++) {
     const div = document.createElement("div");
     div.className = "float-photo";

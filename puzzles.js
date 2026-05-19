@@ -761,6 +761,10 @@ const QUIZ_QS = [
     ans: 1,
   },
 ];
+QUIZ_QS.forEach((q) => {
+  const img = new Image();
+  img.src = q.img;
+});
 let quizIdx = 0,
   quizWarnings = 0,
   quizRestarted = false;
@@ -802,18 +806,23 @@ function answerQuiz(i) {
     opts[i].classList.add("correct");
     showCompanion("Correct! 🎉");
     playYey();
-    // Reveal image
     if (q.img) {
+      const imgEl = document.getElementById("quiz-img-actual");
+      imgEl.style.display = "none";
       document.getElementById("quiz-img-placeholder").style.display = "none";
-      document.getElementById("quiz-img-actual").src = q.img;
-      document.getElementById("quiz-img-actual").style.display = "block";
+      imgEl.onload = () => {
+        imgEl.style.display = "block";
+        setTimeout(() => {
+          quizIdx++;
+          if (quizIdx >= QUIZ_QS.length) {
+            completeChallenge(4, 440);
+          } else {
+            renderQuiz();
+          }
+        }, 2500);
+      };
+      imgEl.src = q.img;
     }
-    setTimeout(() => {
-      quizIdx++;
-      if (quizIdx >= QUIZ_QS.length) {
-        completeChallenge(4, 440);
-      } else renderQuiz();
-    }, 1200);
   } else {
     opts[i].classList.add("wrong");
     quizWarnings++;

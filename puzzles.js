@@ -6,7 +6,7 @@ let tttBoard = [],
   tttGameActive = false,
   tttPoints = 0,
   tttRestarted = false;
-const TTT_ROUND_PTS = [0, 100, 150, 190];
+const TTT_ROUND_PTS = [0, 146.67, 146.67, 146.66];
 
 function initTTT() {
   stopVoice();

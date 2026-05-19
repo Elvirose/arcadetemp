@@ -15,7 +15,8 @@
   padding: 0;
   box-sizing: border-box;
 }
-img {
+#slideshow-img,
+#cert-overlay-img {
   user-select: none;
   -webkit-user-drag: none;
 }

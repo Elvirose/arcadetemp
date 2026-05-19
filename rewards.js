@@ -349,6 +349,7 @@ function showEnding() {
 // PLAY AGAIN
 // ================================================================
 function playAgain() {
+  rewardsVoicePlayed = false;
   gameState.points = 0;
   gameState.completed = [false, false, false, false, false];
   gameState.currentChallenge = 0;

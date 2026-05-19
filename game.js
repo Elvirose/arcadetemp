@@ -8,7 +8,7 @@ let gameState = {
   currentChallenge: 0,
   challengeRestarted: {},
 };
-
+let rewardsVoicePlayed = false;
 // ================================================================
 // INIT
 // ================================================================
@@ -78,7 +78,14 @@ function showScreen(id, skipVoice) {
   }
 
   if (!skipVoice && SCREEN_VOICES[id]) {
-    setTimeout(() => playVoice(SCREEN_VOICES[id]), 350);
+    if (id === "rewards-screen") {
+      if (!rewardsVoicePlayed) {
+        rewardsVoicePlayed = true;
+        setTimeout(() => playVoice(SCREEN_VOICES[id]), 350);
+      }
+    } else {
+      setTimeout(() => playVoice(SCREEN_VOICES[id]), 350);
+    }
   }
 }
 

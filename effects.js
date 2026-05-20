@@ -144,7 +144,9 @@ document.addEventListener("click", (e) => {
     e.target.closest(".challenge-card") ||
     e.target.closest(".gift-box") ||
     e.target.closest(".card-item") ||
-    e.target.closest(".ss-nav")
+    e.target.closest(".ss-nav") ||
+     e.target.closest("#card-slideshow-inner") ||
+  e.target.closest("#card-slideshow-overlay")
   )
     return;
   const emoji = document.createElement("div");
